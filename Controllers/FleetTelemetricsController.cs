@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RouteMatching.Data.Model;
+using RouteMatching.Data.Model.Here;
 using RouteMatching.Services;
 
 namespace RouteMatching.Controllers
@@ -30,9 +31,9 @@ namespace RouteMatching.Controllers
             return fleetTelemetrics.GetRouteDetails(id)?.Points ?? (ActionResult<IEnumerable<PointDTO>>)NotFound();
         }
         [HttpGet("routematching/{id}")]
-        public ActionResult<IEnumerable<PointDTO>> FindRouteMatching(string id)
+        public ActionResult<MatchRouteResponseDTO> FindRouteMatching(string id)
         {
-            return fleetTelemetrics.GetRouteDetails(id)?.Points ?? (ActionResult<IEnumerable<PointDTO>>)NotFound();
+            return fleetTelemetrics.TryToMatchRoute(id) ?? (ActionResult<MatchRouteResponseDTO>)NotFound();
         }
     }
 }
