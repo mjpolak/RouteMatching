@@ -9,8 +9,8 @@ namespace RouteMatching.Data.Model
     {
         public int unitId { get; set; }
         public DateTime timedate { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
+        public decimal latitude { get; set; }
+        public decimal longitude { get; set; }
         public bool ignition { get; set; }
         public bool engine { get; set; }
         public double speed { get; set; }
