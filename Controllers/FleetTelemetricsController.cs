@@ -19,17 +19,30 @@ namespace RouteMatching.Controllers
         {
             this.fleetTelemetrics = fleetTelemetrics;
         }
+        /// <summary>
+        /// Returns List of routes stored in repository
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<RouteHeaderDTO> Get()
         {
             return fleetTelemetrics.GetRoutesMetaData();
         }
-
+        /// <summary>
+        /// Returns List of points for given route
+        /// </summary>
+        /// <param name="id">Route id</param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<PointDTO>> Get(string id)
         {
             return fleetTelemetrics.GetRouteDetails(id)?.Points ?? (ActionResult<IEnumerable<PointDTO>>)NotFound();
         }
+        /// <summary>
+        /// Uses HERE api to find matching route for given points
+        /// </summary>
+        /// <param name="id">Route id</param>
+        /// <returns></returns>
         [HttpGet("routematching/{id}")]
         public ActionResult<MatchRouteResponseDTO> FindRouteMatching(string id)
         {

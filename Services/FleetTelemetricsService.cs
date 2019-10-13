@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
 using RouteMatching.Data.Model;
@@ -17,11 +18,18 @@ namespace RouteMatching.Services
     {
         private readonly IRouteRepository routeRepository;
         private readonly Serilog.ILogger logger;
+        private readonly IConfiguration configuration;
+        private readonly string ApiId;
+        private readonly string ApiCode;
 
-        public FleetTelemetricsService(IRouteRepository routeRepository,Serilog.ILogger logger)
+        public FleetTelemetricsService(IRouteRepository routeRepository,Serilog.ILogger logger,IConfiguration configuration)
         {
             this.routeRepository = routeRepository;
+            var hereApi = configuration.GetSection("HereApi");
+            ApiId = hereApi["app_id"];
+            ApiCode = hereApi["app_code"];
             this.logger = logger;
+            this.configuration = configuration;
         }
 
         public RouteDataDTO GetRouteDetails(string Id)
@@ -46,8 +54,8 @@ namespace RouteMatching.Services
 
             var client = new RestClient("https://rme.api.here.com/2/matchroute.json");
             var request = new RestRequest(Method.GET);
-            request.AddParameter("app_id", "cGeQWsKf5jJUwu3fGnWh");
-            request.AddParameter("app_code", "2ItINrQLQHMeSN_38K3dlw");
+            request.AddParameter("app_id", ApiId);
+            request.AddParameter("app_code", ApiCode);
             request.AddParameter("routemode", "car");
             request.AddParameter("file", gpxData);
 
